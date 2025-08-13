@@ -1,7 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
+import sqlite3
 import re
+from flask import Flask, render_template, request, redirect, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+
+# Conectando ao banco de dados
+conn = sqlite3.connect("meubanco.db")
+db = conn.cursor()
 
 # Validação de email
 def email_valido(email):
@@ -38,7 +44,11 @@ def register():
             error = "The passwords are not the same."
             return render_template("register.html", error=error) 
 
+        # Gerar hash da senha
+        password_hash = generate_password_hash(password)
+
         # Adicionar ao banco de dados
+        db.execute("INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)", (name, email, password_hash))
         
         return redirect('/')
     else:
