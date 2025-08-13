@@ -1,9 +1,11 @@
+import os
 import sqlite3
 import re
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 # Validação de email
 def email_valido(email):
@@ -13,10 +15,43 @@ def email_valido(email):
 # Validação da página de login
 @app.route("/", methods=['GET', 'POST'])
 def login():
+    error = None
     if request.method == "POST":
-        return render_template("index.html")
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        # Validação do forms
+        if not email or not password: 
+            error = "No field can be empty"
+            return render_template("index.html", error=error)
+        
+        # Abrir conexão com o banco de dados
+        conn = sqlite3.connect("database.db")
+        db = conn.cursor()
+        # Verificar se email existe no banco de dados
+        db.execute("SELECT id, name, password_hash FROM users WHERE email = ?", (email,))
+        user = db.fetchone()
+        conn.close()
+
+        # Email não encontrado
+        if user is None:
+            error = "Email not found"
+            return render_template("index.html", error=error)
+    
+        user_id, user_name, password_hash = user
+
+         # Verificar senha
+        if not check_password_hash(password_hash, password):
+            error = "Senha incorreta."
+            return render_template("index.html", error=error)
+
+        # Login bem-sucedido
+        session["user_id"] = user_id
+        return f"Olá, {user_name}! Você está logado."
+
     else:
         return render_template("index.html")
+
 
 # Validação da página de Sign in
 @app.route("/register", methods=["GET", "POST"])

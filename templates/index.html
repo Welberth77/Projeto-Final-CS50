@@ -12,17 +12,22 @@
 </head>
 <body class="d-flex justify-content-center align-items-center min-vh-100 py-4 bg-body-tertiary">
   <main class="form-signin w-100" style="max-width: 330px;">
-    <form>
+    <form method="post" action="/">
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+            {{ error }}
+            </div>
+        {% endif %}
         <img class="mb-4 mx-auto d-block" src="../static/pizza.png" alt="Bootstrap" width="72" height="57" />
         <h1 class="h3 mb-3 fw-normal text-center">Log in</h1>
 
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" />
-            <label for="floatingInput">Email address</label>
+            <input type="email" class="form-control" id="floatingEmail" name="email" placeholder="name@example.com" />
+            <label for="floatingEmail">Email address</label>
         </div>
 
         <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" />
+            <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" />
             <label for="floatingPassword">Password</label>
         </div>
 
