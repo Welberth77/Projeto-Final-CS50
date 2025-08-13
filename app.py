@@ -5,10 +5,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
-# Conectando ao banco de dados
-conn = sqlite3.connect("meubanco.db")
-db = conn.cursor()
-
 # Validação de email
 def email_valido(email):
     padrao = r'^[\w\.-]+@[\w\.-]+\.\w+$'
@@ -48,7 +44,11 @@ def register():
         password_hash = generate_password_hash(password)
 
         # Adicionar ao banco de dados
+        conn = sqlite3.connect("database.db")
+        db = conn.cursor()
         db.execute("INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)", (name, email, password_hash))
+        conn.commit()  # <- ESSENCIAL para salvar os dados
+        conn.close()
         
         return redirect('/')
     else:
