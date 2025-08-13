@@ -1,6 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for
+import re
 
 app = Flask(__name__)
+
+# Validação de email
+def email_valido(email):
+    padrao = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+    return re.match(padrao, email) is not None
 
 # Validação da página de login
 @app.route("/", methods=['GET', 'POST'])
@@ -20,14 +26,20 @@ def register():
         password = request.form.get("password")
         password_confirmation = request.form.get("passwordConfirmation")
 
-        if not name or not email or not password or not password_confirmation:
-            error = "Todos os campos são obrigatórios."
-            return render_template("register.html", error=error)
+        # Validação do forms
+        if not name or not email or not password or not password_confirmation: 
+            error = "No field can be empty"
+            return render_template("register.html", error=error) 
+        if not email_valido(email):
+            error = "invalid email"
+            return render_template("register.html", error=error) 
 
         if password != password_confirmation:
-            error = "As senhas não coincidem."
-            return render_template('register.html', error=error)
+            error = "The passwords are not the same."
+            return render_template("register.html", error=error) 
 
-        return render_template('register.html', error=error)
+        # Adicionar ao banco de dados
+        
+        return redirect('/')
     else:
         return render_template("register.html")
