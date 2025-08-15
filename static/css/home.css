@@ -1,0 +1,29 @@
+/* Links da navbar */
+.navbar-nav .nav-link {
+    color: white !important;
+}
+
+/* Link ativo (página atual) */
+.navbar-nav .nav-link.active {
+    color: #FFD700 !important; /* amarelo */
+    font-weight: bold;
+}
+
+/* Hover */
+.navbar-nav .nav-link:hover {
+    color: #FFD700 !important; /* amarelo no hover */
+}
+
+/* Dropdown */
+.dropdown-menu {
+    background-color: #B22222; /* vermelho escuro */
+}
+
+.dropdown-menu .dropdown-item {
+    color: white !important;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #FF4500; /* laranja no hover */
+    color: white !important;
+}

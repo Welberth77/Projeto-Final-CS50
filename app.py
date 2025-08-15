@@ -47,7 +47,7 @@ def login():
 
         # Login bem-sucedido
         session["user_id"] = user_id
-        return f"Olá, {user_name}! Você está logado."
+        return redirect("home")
 
     else:
         return render_template("index.html")
@@ -88,3 +88,8 @@ def register():
         return redirect('/')
     else:
         return render_template("register.html")
+
+# Home
+@app.route("/home", methods=['GET'])
+def home():
+    return render_template("home.html")
