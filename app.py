@@ -92,4 +92,43 @@ def register():
 # Home
 @app.route("/home", methods=['GET'])
 def home():
-    return render_template("home.html")
+    conn = sqlite3.connect("database.db")
+    conn.row_factory = sqlite3.Row  # permite acessar por nome da coluna
+    cursor = conn.cursor()
+    pizzas = conn.execute('SELECT * FROM pizzas WHERE mais_vendida = 1 LIMIT 6').fetchall()
+
+    # Adicionar tamanhos a cada pizza
+    pizzas_completas = []
+    for pizza in pizzas:
+        tamanhos = cursor.execute("SELECT * FROM tamanhos WHERE pizza_id=?", (pizza["id"],)).fetchall()
+        pizza_dict = dict(pizza)
+        pizza_dict["tamanhos"] = tamanhos
+        pizzas_completas.append(pizza_dict)
+
+    conn.close()
+    return render_template('home.html', pizzas=pizzas_completas)
+
+
+# Adicionando ao carrinho
+@app.route("/add_carrinho", methods=["POST"])
+def add_carrinho():
+    pizza_id = request.form["pizza_id"]
+    tamanho_id = request.form["tamanho_id"]
+    usuario_id = session["user_id"]
+    
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    # Verifica se já existe no carrinho
+    cursor.execute("SELECT * FROM carrinho WHERE usuario_id=? AND pizza_id=? AND tamanho_id=?", (usuario_id, pizza_id, tamanho_id))
+    item = cursor.fetchone()
+
+    if item:
+        cursor.execute("UPDATE carrinho SET quantidade = quantidade + 1 WHERE usuario_id=? AND pizza_id=? AND tamanho_id=?", (usuario_id, pizza_id, tamanho_id))
+    else:
+        cursor.execute("INSERT INTO carrinho (usuario_id, pizza_id, tamanho_id, quantidade) VALUES (?, ?, ?, 1)", (usuario_id, pizza_id, tamanho_id))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/home")

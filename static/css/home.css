@@ -27,3 +27,8 @@
     background-color: #FF4500; /* laranja no hover */
     color: white !important;
 }
+
+.pizza-img {
+  height: 200px;      /* altura padrão */
+  object-fit: cover;  /* corta e centraliza a imagem */
+}

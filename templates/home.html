@@ -50,6 +50,60 @@
         </div>
     </nav>
 
+    <div class="container mt-4">
+        <h2 class="text-center text-danger fw-bold mb-4">Best selling pizzas</h2>
+        <div class="row">
+            {% for pizza in pizzas %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="{{ pizza.imagem }}" class="card-img-top pizza-img" alt="{{ pizza.nome }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ pizza.nome }}</h5>
+                        <p class="card-text">{{ pizza.descricao }}</p>
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalPizza{{ pizza.id }}">
+                            Adicionar ao carrinho
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para cada pizza -->
+            <div class="modal fade" id="modalPizza{{ pizza.id }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ pizza.nome }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{ pizza.descricao }}</p>
+                            <p><img src="{{ pizza.imagem }}" width="150"></p>
+
+                            <form method="post" action="/add_carrinho">
+                                <input type="hidden" name="pizza_id" value="{{ pizza.id }}">
+
+                                <label for="tamanho">Choose the size:</label>
+                                <select name="tamanho_id" class="form-select">
+                                    <option value="" disabled selected>Size</option>
+                                    {% for t in pizza.tamanhos %}
+                                    <option value="{{ t.id }}">
+                                        {{ t.tamanho }} - R$ {{ t.preco }} - {{ t.tempo_preparo }} min
+                                    </option>
+                                    {% endfor %}
+                                </select>
+
+                                <br>
+                                <button type="submit" class="btn btn-primary">Confirm</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
