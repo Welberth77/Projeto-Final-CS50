@@ -125,7 +125,7 @@ def add_cart():
 
     # validação da quantidade
     if quantidade < 1 or quantidade > 99:
-        flash("Quantidade inválida. Escolha entre 1 e 99.")
+        flash("Quantidade inválida. Escolha entre 1 e 99.", "danger")
         return redirect("home")
     
     # Buscar pizza
@@ -133,7 +133,7 @@ def add_cart():
     pizza = cur.fetchone()
     # Pizza não encontrada
     if not pizza:
-        flash("Pizza não encontrada.")
+        flash("Pizza não encontrada.", "danger")
         return redirect("home")
 
     # Calcular preço total
@@ -151,7 +151,7 @@ def add_cart():
     db.commit()
     db.close()
 
-    flash("Pizza added to the cart!")
+    flash("Pizza added to the cart!", "success")
     return redirect("home")
 
 
