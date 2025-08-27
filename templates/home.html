@@ -60,6 +60,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ pizza.nome }}</h5>
                         <p class="card-text">{{ pizza.descricao }}</p>
+                        <p class="card-text">Preparation time: <strong>{{ pizza.tempo_preparo }} min</strong></p>
                         <h5 class="card-text fw-bold text-success">R$ {{ "%0.2f" | format(pizza.preco) | replace(".", ",") }}</h5>
 
                         <form method="post" action="/add_cart">

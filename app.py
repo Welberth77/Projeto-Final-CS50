@@ -106,39 +106,53 @@ def home():
 @app.route("/add_cart", methods=['POST'])
 def add_cart():
     error = None
+    # Verificando se está logado
+    user_id = session.get("user_id")
+    if not user_id:
+        flash("Você precisa estar logado para adicionar ao carrinho.")
+        return redirect("/")
 
     # Conectando ao banco de dados
     db = sqlite3.connect("database.db")
+    # Acessar por nomes por coluna
+    db.row_factory = sqlite3.Row 
     # Pegando valores do usuário
     userId = session["user_id"]
 
     # Pegando valores da pizza
     pizzaId = request.form.get("pizza_id")
-    quantidade = request.form.get("quantity")
+    quantidade = int(request.form.get("quantity", 1))
 
-    # validação 
-    if int(quantidade) < 1 or int(quantidade) > 99:
-        error = "Invalid quantity. Choose between 1 and 99."
-        return render_template("home.html", error=error)
+    # validação da quantidade
+    if quantidade < 1 or quantidade > 99:
+        flash("Quantidade inválida. Escolha entre 1 e 99.")
+        return redirect("home")
     
     # Buscar pizza
-    db.execute("SELECT id, preco FROM pizzas WHERE id = ?", (pizzaId,))
-    pizza = db.fetchone()
+    cur = db.execute("SELECT id, preco, tempo_preparo FROM pizzas WHERE id = ?", (pizzaId,))
+    pizza = cur.fetchone()
+    # Pizza não encontrada
+    if not pizza:
+        flash("Pizza não encontrada.")
+        return redirect("home")
 
     # Calcular preço total
     preco_unitario = pizza["preco"]
     preco_total = preco_unitario * quantidade
 
+    # Calcular tempo total
+    tempo_preparo = pizza["tempo_preparo"]
+    tempo_preparo_total = tempo_preparo * quantidade
+
     # Adionando produtos ao banco de dados co carrinho
     db.execute('''
-        INSERT INTO carrinho (usuario_id, pizza_id, quantidade, preco_unitario, preco_total)
-        VALUES (?, ?, ?, ?, ?)
-    ''', (userId, pizzaId, quantidade, preco_unitario, preco_total))
+        INSERT INTO carrinho (usuario_id, pizza_id, quantidade, preco_unitario, preco_total, tempo_preparo_total)
+        VALUES (?, ?, ?, ?, ?, ?)''', (userId, pizzaId, quantidade, preco_unitario, preco_total, tempo_preparo_total))
     db.commit()
     db.close()
 
-    error = "Pizza added to the cart!"
-    return render_template("home.html")
+    flash("Pizza added to the cart!")
+    return redirect("home")
 
 
 
