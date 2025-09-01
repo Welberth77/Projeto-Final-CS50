@@ -159,9 +159,33 @@ def add_cart():
 # Cart
 @app.route("/Cart", methods=['GET', 'POST'])
 def cart():
-    if request.method == "POST":
-        return render_template("cart.html")
+    user_id = session.get("user_id")
+    # Conectando ao bando de dados
+    db = sqlite3.connect("database.db")
+    # Acessar os dados pelo nome da coluna
+    db.row_factory = sqlite3.Row  
+    # Junção das tabelas Pizzas e Carrinho
+    cartItems = db.execute('''
+        SELECT c.id,
+            c.quantidade,
+            c.preco_unitario,
+            c.preco_total,
+            c.tempo_preparo_total,
+            p.nome
+        FROM carrinho c
+        JOIN pizzas p ON c.pizza_id = p.id
+        WHERE c.usuario_id = ?
+    ''', (user_id,)).fetchall()
 
-    # Se não tiver nada no carrinho
-    else:
-        return render_template("cart.html")
+    # Totais do carrinho
+    totals = db.execute('''
+        SELECT 
+            COALESCE(SUM(c.preco_total), 0) AS total_preco,
+            COALESCE(SUM(c.tempo_preparo_total), 0) AS total_tempo
+        FROM carrinho c
+        WHERE c.usuario_id = ?
+    ''', (user_id,)).fetchone()
+
+    db.close()
+
+    return render_template("cart.html", cartItems=cartItems, totals=totals)

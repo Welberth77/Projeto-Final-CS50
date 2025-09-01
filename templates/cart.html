@@ -50,7 +50,25 @@
         </div>
     </nav>
 
-    <h2 class="text-center text-danger fw-bold mb-4">No product added</h2>
+    <!-- Mostrando itens do carrinho -->
+    {% if not cartItems %}
+        <h2 class="text-center text-danger fw-bold mb-4">No product added</h2>
+    {% else %}
+        {% for item in cartItems %}
+            <div class="card mb-3 p-3 shadow-sm">
+                <h5>{{ item['nome'] }}</h5>
+                <p>Preço unitário: R$ {{ item['preco_unitario'] }}</p>
+                <p>Quantidade: {{ item['quantidade'] }}</p>
+                <p>Total: R$ {{ item['preco_total'] }}</p>
+                <p>Tempo de preparo: {{ item['tempo_preparo_total'] }} min</p>
+            </div>
+        {% endfor %}
+        <div class="mt-4 p-3 bg-light rounded shadow-sm">
+            <h4 class="fw-bold">Resumo do Pedido</h4>
+            <p>Valor total: <strong>R$ {{ totals['total_preco'] }}</strong></p>
+            <p>Tempo total de preparo: <strong>{{ totals['total_tempo'] }} min</strong></p>
+        </div>
+    {% endif %}
 
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
