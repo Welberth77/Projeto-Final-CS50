@@ -40,6 +40,11 @@
                             <li><a class="dropdown-item" href="#">Something else here</a></li>
                         </ul>
                     </li>
+                    <li>
+                        {% if session.get('user_id') %}
+                            <a class="btn btn-danger" href="/logout">Logout</a>
+                        {% endif %}
+                    </li>
                     <li class="nav-item"></li>
                 </ul>
                 <form class="d-flex" role="search">

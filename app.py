@@ -53,6 +53,21 @@ def login():
         return render_template("index.html")
 
 
+# Deslogar
+@app.route("/logout")
+def logout():
+    usuario_id = session.get("user_id")
+
+    if usuario_id:
+        db = sqlite3.connect("database.db")
+        db.execute("DELETE FROM carrinho WHERE usuario_id = ?", (usuario_id,))
+        db.commit()
+        db.close()
+
+    session.clear()  # remove dados da sessão
+    return redirect("/")  
+
+
 # Validação da página de Sign in
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -92,7 +107,10 @@ def register():
 # Home
 @app.route("/home", methods=['GET'])
 def home():
-    error = None
+    # Verifica se o usuário está logado
+    if not session.get('user_id'):
+        return redirect("/")
+    
     # Conectando ao banco de dados
     db = sqlite3.connect("database.db")
     db.row_factory = sqlite3.Row  # permite acessar por nome da coluna
