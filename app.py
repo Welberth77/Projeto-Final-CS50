@@ -135,7 +135,7 @@ def add_cart():
     # Acessar por nomes por coluna
     db.row_factory = sqlite3.Row 
     # Pegando valores do usuário
-    userId = session["user_id"]
+    userId = session.get("user_id")
 
     # Pegando valores da pizza
     pizzaId = request.form.get("pizza_id")
@@ -173,15 +173,35 @@ def add_cart():
     return redirect("home")
 
 
+# Deletar item do carrinho
+@app.route("/delete_item_cart", methods=["POST"])
+def delete_item():
+    userId = session.get("user_id")
+
+    if not userId:
+        return redirect("/")
+    
+    # Id do item
+    item_id = request.form.get("item_id")
+    
+    db = sqlite3.connect("database.db")
+    db.execute("DELETE FROM carrinho WHERE id = ? AND usuario_id = ?", (item_id, userId))
+    db.commit()
+    db.close()
+
+    return redirect("Cart")
+
 
 # Cart
 @app.route("/Cart", methods=['GET', 'POST'])
 def cart():
-    # Verifica se o usuário está logado
-    if not session.get('user_id'):
-        return redirect("/")
     
     user_id = session.get("user_id")
+    
+    # Verifica se o usuário está logado
+    if not user_id:
+        return redirect("/")
+    
     # Conectando ao bando de dados
     db = sqlite3.connect("database.db")
     # Acessar os dados pelo nome da coluna

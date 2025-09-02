@@ -66,10 +66,18 @@
                 <p>quantity: {{ item['quantidade'] }}</p>
                 <p>Total: R$ {{ item['preco_total'] }}</p>
                 <p>Preparation time: {{ item['tempo_preparo_total'] }} min</p>
+                
+                <!-- Botão excluir -->
+                <form method="POST" action="/delete_item_cart">
+                    <input type="hidden" name="item_id" value="{{ item['id'] }}">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Remove
+                    </button>
+                </form>
             </div>
         {% endfor %}
         <div class="mt-4 p-3 bg-light rounded shadow-sm">
-            <h4 class="fw-bold">Resumo do Pedido</h4>
+            <h4 class="fw-bold">Order summary</h4>
             <p>Full value: <strong>R$ {{ totals['total_preco'] }}</strong></p>
             <p>Total preparation time: <strong>{{ totals['total_tempo'] }} min</strong></p>
         </div>
