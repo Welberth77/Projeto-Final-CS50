@@ -177,6 +177,10 @@ def add_cart():
 # Cart
 @app.route("/Cart", methods=['GET', 'POST'])
 def cart():
+    # Verifica se o usuário está logado
+    if not session.get('user_id'):
+        return redirect("/")
+    
     user_id = session.get("user_id")
     # Conectando ao bando de dados
     db = sqlite3.connect("database.db")
