@@ -120,6 +120,21 @@ def home():
     return render_template('home.html', pizzas=pizzas)
 
 
+# Menu (MOSTRA TODAS AS PIZZAS)
+@app.route("/menu", methods=["GET"])
+def menu():
+    if not session.get('user_id'):
+        return redirect("/")
+    
+    # Conectando ao banco de dados
+    db = sqlite3.connect("database.db")
+    db.row_factory = sqlite3.Row  # permite acessar por nome da coluna
+    pizzas = db.execute('SELECT * FROM pizzas').fetchall()
+
+    db.close()
+    return render_template('menu.html', pizzas=pizzas)
+
+
 # Adicionar ao carrinho
 @app.route("/add_cart", methods=['POST'])
 def add_cart():
@@ -189,11 +204,11 @@ def delete_item():
     db.commit()
     db.close()
 
-    return redirect("Cart")
+    return redirect("cart")
 
 
-# Cart
-@app.route("/Cart", methods=['GET', 'POST'])
+# cart
+@app.route("/cart", methods=['GET', 'POST'])
 def cart():
     
     user_id = session.get("user_id")

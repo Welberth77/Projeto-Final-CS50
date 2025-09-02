@@ -7,23 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/css/home.css">
 
-    <title>Home</title>
+    <title>Cart</title>
 </head>
 <body>
-    <!-- Mensagem com Flash do Flask -->
-    <div class="position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 9999;">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-        {% endif %}
-    {% endwith %}
-    </div>
-
     <nav class="navbar navbar-expand-lg" style="background-color: #B22222;" data-bs-theme="light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
@@ -35,10 +21,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/home">Home</a>
+                        <a class="nav-link" aria-current="page" href="/home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/menu">Menu</a>
+                        <a class="nav-link active" href="/menu">Menu</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/cart">Cart</a>
@@ -70,7 +56,7 @@
     </nav>
 
     <div class="container mt-4">
-        <h2 class="text-center text-danger fw-bold mb-4">Best selling pizzas</h2>
+        <h2 class="text-center text-danger fw-bold mb-4">All pizzas</h2>
         <div class="row">
             {% for pizza in pizzas %}
             <div class="col-md-4">
@@ -108,21 +94,7 @@
         </div>
     </div>
 
-
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-
-    <!-- Script para a mensagem do flash com flask -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const alerts = document.querySelectorAll(".alert");
-            alerts.forEach(alert => {
-                setTimeout(() => {
-                const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
-                bsAlert.close();
-                }, 3000);
-            });
-        });
-    </script>
 </body>
 </html>
