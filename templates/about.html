@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <!-- Título da página -->
+        <div class="text-center mb-4">
+            <h1 class="fw-bold text-danger">About Pizza Store</h1>
+            <p class="lead">Learn more about our project and mission.</p>
+        </div>
+
+        <!-- Seção de descrição -->
+        <div class="row align-items-center mb-3">
+            <div class="col-md-4">
+                <img src="../static/pizza.png" alt="Pizza Store" class="img-fluid rounded shadow-sm w-75">
+            </div>
+            <div class="col-md-6">
+                <h3 class="fw-bold">Our Mission</h3>
+                <p>
+                    Pizza Store is a web application developed for the CS50 final project.
+                    It allows users to browse in a catalog of different pizzas, add to a cart, in the cart shows the total value of the order and the preparation time.
+                    The system is built using Flask, Python, JavaScript, HTML5, CSS3, Bootstrap, and SQLite.
+                </p>
+                <p>
+                    Our goal is to provide a user-friendly and responsive interface,
+                    making the pizza ordering experience simple and enjoyable.
+                </p>
+            </div>
+        </div>
+
+        <!-- Seção sobre o desenvolvedor / portfolio -->
+        <div class="text-center mb-5">
+            <h3 class="fw-bold text-danger mb-3">About the Developer</h3>
+            <p>Built entirely by Welberth Oliveira. Check out my work and connect with me:</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="https://github.com/Welberth77" target="_blank" class="btn btn-primary">
+                    <i class="bi bi-github"></i> GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/welberth-oliveira" target="_blank" class="btn btn-primary">
+                    <i class="bi bi-linkedin"></i> LinkedIn
+                </a>
+                <a href="https://welberth-portfolio.vercel.app" target="_blank" class="btn btn-primary">
+                    <i class="bi bi-person-circle"></i> Portfolio
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

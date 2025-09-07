@@ -1,7 +1,7 @@
 import os
 import sqlite3
 import re
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
+from flask import Flask, render_template, request, redirect, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -280,3 +280,15 @@ def cart():
     }
 
     return render_template("cart.html", cartItems=cartItems, totals=totals)
+
+# Sobre
+@app.route("/about")
+def about():
+    user_id = session.get("user_id")
+
+    # Verifica se o usuário está logado
+    if not user_id:
+        return redirect("/")
+    
+    return render_template("about.html")
+    
