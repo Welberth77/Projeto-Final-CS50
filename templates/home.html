@@ -30,7 +30,7 @@
                 <img src="../static/pizza.png" alt="pizza" width="50" height="44">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -61,8 +61,9 @@
                     </li>
                     <li class="nav-item"></li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                <!-- Pesquisa de pizzas -->
+                <form method="GET" action="/menu" class="d-flex" role="search">
+                    <input class="form-control me-2" type="text" name="q" placeholder="Search pizza..." value="{{ request.args.get('q', '') }}">
                     <button class="btn btn-outline-warning" type="submit">Search</button>
                 </form>
             </div>

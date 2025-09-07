@@ -123,13 +123,26 @@ def home():
 # Menu (MOSTRA TODAS AS PIZZAS)
 @app.route("/menu", methods=["GET"])
 def menu():
+    # Verificando de usuário está logado
     if not session.get('user_id'):
         return redirect("/")
     
+    # pega o que foi digitado no Search
+    q = request.args.get("q", "").strip()  
+
     # Conectando ao banco de dados
     db = sqlite3.connect("database.db")
     db.row_factory = sqlite3.Row  
-    pizzas = db.execute('SELECT * FROM pizzas').fetchall()
+
+    # Se perquisou alguma pizza especifica
+    if q:  
+        pizzas = db.execute(
+            "SELECT * FROM pizzas WHERE nome LIKE ? OR descricao LIKE ?",
+            (f"%{q}%", f"%{q}%")
+        ).fetchall()
+    # Se não pesquisou mostra todas
+    else:
+        pizzas = db.execute('SELECT * FROM pizzas').fetchall()
 
     db.close()
     return render_template('menu.html', pizzas=pizzas)
