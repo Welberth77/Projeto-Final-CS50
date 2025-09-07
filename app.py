@@ -128,7 +128,7 @@ def menu():
     
     # Conectando ao banco de dados
     db = sqlite3.connect("database.db")
-    db.row_factory = sqlite3.Row  # permite acessar por nome da coluna
+    db.row_factory = sqlite3.Row  
     pizzas = db.execute('SELECT * FROM pizzas').fetchall()
 
     db.close()
@@ -138,7 +138,6 @@ def menu():
 # Adicionar ao carrinho
 @app.route("/add_cart", methods=['POST'])
 def add_cart():
-    error = None
     # Verificando se está logado
     user_id = session.get("user_id")
     if not user_id:
@@ -184,8 +183,10 @@ def add_cart():
     db.commit()
     db.close()
 
+    
     flash("Pizza added to the cart!", "success")
-    return redirect("home")
+    page = request.form.get("page")
+    return redirect(page or "home")
 
 
 # Deletar item do carrinho

@@ -10,6 +10,20 @@
     <title>Cart</title>
 </head>
 <body>
+    <!-- Mensagem com Flash do Flask -->
+    <div class="position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 9999;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        {% endif %}
+    {% endwith %}
+    </div>
+
     <nav class="navbar navbar-expand-lg" style="background-color: #B22222;" data-bs-theme="light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
@@ -69,11 +83,8 @@
                         <h5 class="card-text fw-bold text-success">R$ {{ "%0.2f" | format(pizza.preco) | replace(".", ",") }}</h5>
 
                         <form method="post" action="/add_cart">
-                            {% if error %}
-                                <div class="alert alert-danger" role="alert">
-                                {{ error }}
-                                </div>
-                            {% endif %}
+                            <!-- Retorna a página que está -->
+                            <input type="hidden" name="page" value="{{ request.path }}">
                             <input type="hidden" name="pizza_id" value="{{ pizza.id }}">
                             <div class="d-flex align-items-end gap-3 mb-3">
                                 <!-- Quantidade -->
