@@ -246,4 +246,24 @@ def cart():
 
     db.close()
 
+    # formatando preço para 2 casas decimais
+    total_preco = round(totals["total_preco"], 2)
+
+    # Formatando tempo para horas e minutos
+    minutos = totals["total_tempo"]
+    if minutos >= 60:
+        horas = minutos // 60
+        minutos_rest = minutos % 60
+        if minutos_rest > 0:
+            total_tempo = f"{horas}h {minutos_rest}min"
+        else:
+            total_tempo = f"{horas}h"
+    else:
+        total_tempo = f"{minutos}min"
+
+    totals = {
+        "total_preco": total_preco,
+        "total_tempo": total_tempo
+    }
+
     return render_template("cart.html", cartItems=cartItems, totals=totals)
